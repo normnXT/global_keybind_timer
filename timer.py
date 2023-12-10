@@ -83,8 +83,8 @@ class TimerApp:
     def run(self):
         print(
             "Press F8 to start/stop the timer\n"
-            "Press shift+F8 to start a new timer session in this window\n"
-            "Press shift+F9 to undo the last addition to total time\n"
+            "Press shift+F8 to undo the last addition to total time\n"
+            "Press shift+F9 to start a new timer session in this window\n"
             "-----"
         )
 
