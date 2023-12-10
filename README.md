@@ -15,12 +15,14 @@ Timer for logging time spent on task(s) without having to tab through windows.
 * Runs in command prompt window
 * Presents time in hours and minutes, but measures in seconds (rounds to nearest minute)
 * Need to ```pip install keyboard``` dependency
-* Keybinds editable in run() method, simply edit the strings
+* Keybinds editable in run() function
 * Script can be executed from provided .bat file, path may need updating if not using a PyCharm venv 
-* Otherwise run it with a basic command in command prompt window, edit path as necessary:
+* Otherwise run it like any other script, with a basic command in command prompt window (edit path as necessary):
   
 ```
 cd path\to\global_keybind_timer
+```
+```
 python timer.py
 ```
 
