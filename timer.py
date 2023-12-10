@@ -91,9 +91,9 @@ class TimerApp:
         # Edit hotkey strings to suit your needs, be mindful of your applications hotkeys
         # https://github.com/boppreh/keyboard#api
         keyboard.add_hotkey('F8', self.toggle_timer)
-        keyboard.add_hotkey('shift+f8', self.new_session)
-        keyboard.add_hotkey('shift+f9', self.rollback_time)
-
+        keyboard.add_hotkey('shift+f8', self.rollback_time)
+        keyboard.add_hotkey('shift+f9', self.new_session)
+        
         # Keeps the program running.
         try:
             while True:
