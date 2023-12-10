@@ -6,7 +6,7 @@ from datetime import datetime
 
 def get_hours_and_min(accumulated_time):
     hours = int(accumulated_time // 3600)
-    minutes = int((accumulated_time % 3600) // 60)
+    minutes = int(round((accumulated_time % 3600) / 60))
     return f"{hours} hours and {minutes} minutes"
 
 
@@ -19,7 +19,7 @@ class TimerApp:
     def __init__(self):
         self.running = False
         self.time_at_start = 0
-        self.time_at_end = 0
+        self.time_at_stop = 0
         self.time_list = []
         self.accumulated_time = sum(self.time_list)
         self.formatted_time = get_hours_and_min(self.accumulated_time)
@@ -36,8 +36,8 @@ class TimerApp:
         if self.running:
             # Stop the timer
             self.running = False
-            self.time_at_end = time.time()
-            self.time_list.append(self.time_at_start - self.time_at_end)
+            self.time_at_stop = time.time()
+            self.time_list.append(self.time_at_start - self.time_at_stop)
             self.log_time_stop(self.formatted_time)
             print(f"Timer stopped at {get_date_and_time()} | Total time: {self.formatted_time}")
         else:
@@ -54,7 +54,6 @@ class TimerApp:
         self.time_list.clear()
 
     def rollback_time(self):
-        # Rollback the time by the last time entry added
         self.time_list.remove(self.time_list[-1])
         self.log_rollback(self.formatted_time)
         print(f"Time removed | New total time: {self.formatted_time}")
@@ -83,15 +82,23 @@ class TimerApp:
             "-----"
         )
 
+        # Edit hotkey strings to suit your needs, be mindful of your applications hotkeys
+        # https://github.com/boppreh/keyboard#api
         keyboard.add_hotkey('F8', self.toggle_timer)
         keyboard.add_hotkey('shift+f8', self.new_session)
         keyboard.add_hotkey('shift+f9', self.rollback_time)
 
         # Keeps the program running.
-        while True:
-            time.sleep(1)
+        try:
+            while True:
+                time.sleep(1)
+        except KeyboardInterrupt:
+            self.time_at_stop = time.time()
+            self.time_list.append(self.time_at_start - self.time_at_stop)
+            self.log_time_stop(self.formatted_time)
 
 
 if __name__ == "__main__":
     app = TimerApp()
     app.run()
+    
