@@ -37,34 +37,40 @@ class TimerApp:
             # Stop the timer
             self.running = False
             self.time_at_stop = time.time()
-            self.time_list.append(self.time_at_start - self.time_at_stop)
+            self.time_list.append(self.time_at_stop - self.time_at_start)
+            self.accumulated_time = sum(self.time_list)
+            self.formatted_time = get_hours_and_min(self.accumulated_time)
             self.log_time_stop(self.formatted_time)
             print(f"Timer stopped at {get_date_and_time()} | Total time: {self.formatted_time}")
         else:
             # Start the timer
             self.running = True
             self.time_at_start = time.time()
-            self.log_time_stop(self.formatted_time)
+            self.log_time_start()
             print(f"Timer started at {get_date_and_time()}")
 
     def new_session(self):
         if self.running:
             self.toggle_timer()
-        print("\n--- Starting a new timer session ---\n")
+        print("\n--- Started a new timer session ---\n")
         self.time_list.clear()
 
     def rollback_time(self):
+        if self.running:
+            self.toggle_timer()
         self.time_list.remove(self.time_list[-1])
+        self.accumulated_time = sum(self.time_list)
+        self.formatted_time = get_hours_and_min(self.accumulated_time)
         self.log_rollback(self.formatted_time)
-        print(f"Time removed | New total time: {self.formatted_time}")
+        print(f"Time removed | Total time: {self.formatted_time}")
 
     def log_time_start(self):
         with open(self.file_path, "a") as file:
-            file.write(f"Timer started at {get_date_and_time()}")
+            file.write(f"Timer started at {get_date_and_time()}\n")
 
     def log_time_stop(self, formatted_time):
         with open(self.file_path, "a") as file:
-            file.write(f"Timer stopped at {get_date_and_time()} | Total time: {formatted_time}")
+            file.write(f"Timer stopped at {get_date_and_time()} | Total time: {formatted_time}\n")
 
     def log_rollback(self, formatted_time):
         with open(self.file_path, "a") as file:
@@ -72,13 +78,13 @@ class TimerApp:
 
     def log_session(self):
         with open(self.file_path, "a") as file:
-            file.write("\n--- New Timer Session ---\n")
+            file.write("\n--- Started a new timer session ---\n")
 
     def run(self):
         print(
             "Press F8 to start/stop the timer\n"
             "Press shift+F8 to start a new timer session in this window\n"
-            "Press shift+F9 to rollback last addition to total time\n"
+            "Press shift+F9 to undo the last addition to total time\n"
             "-----"
         )
 
@@ -94,11 +100,12 @@ class TimerApp:
                 time.sleep(1)
         except KeyboardInterrupt:
             self.time_at_stop = time.time()
-            self.time_list.append(self.time_at_start - self.time_at_stop)
+            self.time_list.append(self.time_at_stop - self.time_at_start)
+            self.accumulated_time = sum(self.time_list)
+            self.formatted_time = get_hours_and_min(self.accumulated_time)
             self.log_time_stop(self.formatted_time)
 
 
 if __name__ == "__main__":
     app = TimerApp()
     app.run()
-    
