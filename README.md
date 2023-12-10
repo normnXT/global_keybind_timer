@@ -10,9 +10,10 @@ Timer for logging time spent on task(s) without having to tab through windows.
 
 **Other info**
 * Presents time in hours and minutes, but measures in seconds (rounds to nearest minute)
+* Need to ```pip install keyboard``` dependency
 * Keybinds editable in run() method, simply edit the strings
 * Script executed from .bat file 
 * Runs in command line window
-* Need to install dependencies (I recommend opening it in Pycharm or your preferred IDE and quickly setting up a venv)
+
 
 
