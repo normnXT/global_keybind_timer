@@ -1,2 +1,18 @@
 # global_keybind_timer
-Timer for measuring time (hours and minutes) spent on a task without any tabbing through windows. 
+Timer for logging time spent on task(s) without having to tab through windows. 
+
+**Features**
+* Logs time and all user actions to .txt file that is named the current date  
+* Starts recording time on keypress (F8) 
+* Stops recording time on second keypress (F8) and adds to total
+* Able to undo additions (shift+F9) to time
+* Able to start a new session (shift+F8) and clear total time
+
+**Other info**
+* Presents time in hours and minutes, but measures in seconds (rounds to nearest minute)
+* Keybinds editable in run() method, simply edit the strings
+* Script executed from .bat file 
+* Runs in command line window
+* Need to install dependencies (I recommend opening it in Pycharm or your preferred IDE and quickly setting up a venv)
+
+
