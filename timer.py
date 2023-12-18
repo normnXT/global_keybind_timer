@@ -1,7 +1,10 @@
+import threading
 import time
-import keyboard
 import os
 from datetime import datetime
+
+import playsound
+import keyboard
 
 
 class TimerApp:
@@ -21,18 +24,30 @@ class TimerApp:
             self.time_list.append(self.time_at_stop - self.time_at_start)
             self.update_time()
             log_time_stop(self.formatted_time)
+            thread = threading.Thread(target=self.inactivity_ping)
+            thread.start()
         else:
             # Start the timer
             self.running = True
             self.time_at_start = time.time()
             log_time_start()
 
+    def inactivity_ping(self):
+        reminder_time = 360
+        try:
+            while not self.running:
+                if time.time() - self.time_at_stop > reminder_time:
+                    sound_thread = threading.Thread(target=play_sound, args=("sound/ekg-variant.wav",))
+                    sound_thread.start()
+                    reminder_time += 360
+        except self.running:
+            pass
+
     def new_session(self):
         if self.running:
             self.toggle_timer()
         self.time_list.clear()
         log_session()
-
 
     def rollback_time(self):
         if self.running:
@@ -68,10 +83,10 @@ class TimerApp:
 
         # Edit hotkey strings to suit your needs, be mindful of OS and application hotkeys
         # https://github.com/boppreh/keyboard#api
-        keyboard.add_hotkey('F8', self.toggle_timer)
-        keyboard.add_hotkey('shift+f7', self.edit_time)
-        keyboard.add_hotkey('shift+f8', self.rollback_time)
-        keyboard.add_hotkey('shift+f9', self.new_session)
+        keyboard.add_hotkey("F8", self.toggle_timer)
+        keyboard.add_hotkey("shift+f7", self.edit_time)
+        keyboard.add_hotkey("shift+f8", self.rollback_time)
+        keyboard.add_hotkey("shift+f9", self.new_session)
 
         # Keeps the program running.
         try:
@@ -123,6 +138,10 @@ def get_hours_and_min(accumulated_time):
 def get_date_and_time():
     current_time = datetime.now()
     return current_time.strftime("%Y-%m-%d %H:%M:%S")
+
+
+def play_sound(sound_path):
+    playsound.playsound(sound_path)
 
 
 if __name__ == "__main__":
