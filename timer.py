@@ -45,10 +45,13 @@ class TimerApp:
         if self.running:
             self.toggle_timer()
         new_time = input("Enter new total time in minutes: ")
-        self.time_list.clear()
-        self.time_list.append(float(new_time) * 60)
-        self.update_time()
-        log_edit()
+        try:
+            self.time_list.clear()
+            self.time_list.append(float(new_time) * 60)
+            self.update_time()
+            log_edit(self.formatted_time)
+        except ValueError:
+            print("Invalid input. Please enter a number.")
 
     def update_time(self):
         self.accumulated_time = sum(self.time_list)
@@ -105,10 +108,10 @@ def log_session():
     print("\n--- Started a new timer session ---\n")
 
 
-def log_edit():
+def log_edit(formatted_time):
     with open(file_path, "a") as file:
-        file.write(f"Timer edited at {get_date_and_time()} | Total time: {self.formatted_time}")
-    print(f"Timer edited at {get_date_and_time()} | Total time: {self.formatted_time}")
+        file.write(f"Timer edited at {get_date_and_time()} | Total time: {formatted_time}")
+    print(f"Timer edited at {get_date_and_time()} | Total time: {formatted_time}")
 
 
 def get_hours_and_min(accumulated_time):
