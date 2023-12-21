@@ -7,8 +7,7 @@ Timer for logging time spent on task(s) without having to tab through windows to
 
 **3. Script can be executed from provided run.bat file, it checks for a venv and sets one up along with dependencies if it does not already exist.**
 
-![Screenshot 2023-12-10 043915](https://github.com/normnXT/global_keybind_timer/assets/119769208/4c678499-5f11-4078-99a2-4a8a5d9e3421)
-
+![Screenshot 2023-12-10 043915](https://github.com/normnXT/global_keybind_timer/assets/119769208/e67cc037-79ce-413e-940d-6f70e3756507)
 
 **Timer Features**
 * Presents time in hours and minutes (rounds to nearest minute), but keeps time in seconds 
