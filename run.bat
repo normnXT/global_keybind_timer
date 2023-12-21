@@ -13,10 +13,10 @@ echo Installing dependencies...
 pip install -r requirements.txt
 
 echo Changing to src directory...
-cls
 cd src
 
 echo The worlds fanciest timer has been initialized!...
+cls
 ..\venv\Scripts\python.exe timer.py
 
 echo.

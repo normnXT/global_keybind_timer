@@ -6,7 +6,7 @@ from datetime import datetime
 
 import playsound
 import keyboard
-import pyfiglet
+from pyfiglet import figlet_format
 
 
 class TimerApp:
@@ -58,7 +58,6 @@ class TimerApp:
 
     def rollback_time(self):
         # Removes the last addition to time_list (one interval of toggle on -> toggle off).
-        # Able to do it multiple times in series.
         if self.running:
             self.toggle_timer()
         self.time_list.remove(self.time_list[-1])
@@ -85,9 +84,9 @@ class TimerApp:
         print(
             "-------\n"
             f"Press {settings['keybindings']['toggle_timer']} to start/stop the timer\n"
-            f"Press {settings['keybindings']['edit_time']} to enter a new total time\n"
-            f"Press {settings['keybindings']['rollback_time']} to undo the last addition to total time\n"
-            f"Press {settings['keybindings']['new_session']} to start a new timer session in this window\n"
+            f"Press {settings['keybindings']['edit_time']} to manually enter a new total time\n"
+            f"Press {settings['keybindings']['rollback_time']} to undo the last addition to the timer\n"
+            f"Press {settings['keybindings']['new_session']} to reset timer and start a new session\n"
             "-------"
         )
 
@@ -98,7 +97,7 @@ class TimerApp:
         keyboard.add_hotkey(settings['keybindings']['rollback_time'], self.rollback_time)
         keyboard.add_hotkey(settings['keybindings']['new_session'], self.new_session)
 
-        # Keeps the program running.
+        # Keeps the program running and adds redundancy by updating the time when application is closed.
         try:
             while True:
                 time.sleep(1)
@@ -160,6 +159,7 @@ def load_settings():
 
 
 if __name__ == "__main__":
+    print(figlet_format("timer", font="roman").rstrip())
     current_date = datetime.now().strftime("%Y-%m-%d")
     filename = f"{current_date}.txt"
     get_dir = os.path.dirname(os.path.realpath(__file__))
