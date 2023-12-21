@@ -1,10 +1,12 @@
 import threading
+import json
 import time
 import os
 from datetime import datetime
 
 import playsound
 import keyboard
+import pyfiglet
 
 
 class TimerApp:
@@ -33,15 +35,19 @@ class TimerApp:
             log_time_start()
 
     def inactivity_ping(self):
-        # Plays an inactivity ping sound every 300 seconds while the timer is not running
-        reminder_time = 300
-        try:
-            while not self.running:
-                if time.time() - self.time_at_stop > reminder_time:
-                    sound_thread = threading.Thread(target=play_sound, args=("../sound/ekg-variant.wav",))
-                    sound_thread.start()
-                    reminder_time += 300
-        except self.running:
+        # Plays an inactivity ping sound every 300 seconds while the timer is not running.
+        # Edit reminder interval or turn on/off in settings.json.
+        reminder_interval = settings['sound']['reminder_interval']
+        if settings['sound']['play_sound']:
+            try:
+                while not self.running:
+                    if time.time() - self.time_at_stop > reminder_interval:
+                        sound_thread = threading.Thread(target=play_sound, args=("../sound/ekg-variant.wav",))
+                        sound_thread.start()
+                        reminder_interval += settings['sound']['reminder_interval']
+            except self.running:
+                pass
+        else:
             pass
 
     def new_session(self):
@@ -51,6 +57,8 @@ class TimerApp:
         log_session()
 
     def rollback_time(self):
+        # Removes the last addition to time_list (one interval of toggle on -> toggle off).
+        # Able to do it multiple times in series.
         if self.running:
             self.toggle_timer()
         self.time_list.remove(self.time_list[-1])
@@ -76,19 +84,19 @@ class TimerApp:
     def run(self):
         print(
             "-------\n"
-            "Press F8 to start/stop the timer\n"
-            "Press shift+F7 to enter a new total time\n"
-            "Press shift+F8 to undo the last addition to total time\n"
-            "Press shift+F9 to start a new timer session in this window\n"
+            f"Press {settings['keybindings']['toggle_timer']} to start/stop the timer\n"
+            f"Press {settings['keybindings']['edit_time']} to enter a new total time\n"
+            f"Press {settings['keybindings']['rollback_time']} to undo the last addition to total time\n"
+            f"Press {settings['keybindings']['new_session']} to start a new timer session in this window\n"
             "-------"
         )
 
-        # Edit hotkey strings to suit your needs, be mindful of OS and application hotkeys
+        # Edit hotkey strings in settings.json to suit your needs, be mindful of OS and application hotkeys
         # https://github.com/boppreh/keyboard#api
-        keyboard.add_hotkey("F8", self.toggle_timer)
-        keyboard.add_hotkey("shift+f7", self.edit_time)
-        keyboard.add_hotkey("shift+f8", self.rollback_time)
-        keyboard.add_hotkey("shift+f9", self.new_session)
+        keyboard.add_hotkey(settings['keybindings']['toggle_timer'], self.toggle_timer)
+        keyboard.add_hotkey(settings['keybindings']['edit_time'], self.edit_time)
+        keyboard.add_hotkey(settings['keybindings']['rollback_time'], self.rollback_time)
+        keyboard.add_hotkey(settings['keybindings']['new_session'], self.new_session)
 
         # Keeps the program running.
         try:
@@ -146,10 +154,16 @@ def play_sound(sound_path):
     playsound.playsound(sound_path)
 
 
+def load_settings():
+    with open('../settings.json', 'r') as file:
+        return json.load(file)
+
+
 if __name__ == "__main__":
     current_date = datetime.now().strftime("%Y-%m-%d")
     filename = f"{current_date}.txt"
     get_dir = os.path.dirname(os.path.realpath(__file__))
     file_path = os.path.join(get_dir, "../logs", filename)
+    settings = load_settings()
     app = TimerApp()
     app.run()

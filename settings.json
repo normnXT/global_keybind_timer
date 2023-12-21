@@ -1,0 +1,12 @@
+{
+  "sound": {
+    "play_sound": true,
+    "reminder_interval": 300
+  },
+  "keybindings": {
+    "toggle_timer": "F8",
+    "edit_time": "shift+f7",
+    "rollback_time": "shift+f8",
+    "new_session": "shift+f9"
+  }
+}

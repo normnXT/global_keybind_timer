@@ -13,11 +13,12 @@ echo Installing dependencies...
 pip install -r requirements.txt
 
 echo Changing to src directory...
+cls
 cd src
 
-echo Running the script...
+echo The worlds fanciest timer has been initialized!...
 ..\venv\Scripts\python.exe timer.py
 
 echo.
-echo Script has ended. Press any key to close.
+echo Script has ended!
 pause > nul
