@@ -33,13 +33,14 @@ class TimerApp:
             log_time_start()
 
     def inactivity_ping(self):
-        reminder_time = 360
+        # Plays an inactivity ping sound every 300 seconds while the timer is not running
+        reminder_time = 300
         try:
             while not self.running:
                 if time.time() - self.time_at_stop > reminder_time:
-                    sound_thread = threading.Thread(target=play_sound, args=("sound/ekg-variant.wav",))
+                    sound_thread = threading.Thread(target=play_sound, args=("../sound/ekg-variant.wav",))
                     sound_thread.start()
-                    reminder_time += 360
+                    reminder_time += 300
         except self.running:
             pass
 
@@ -74,11 +75,12 @@ class TimerApp:
 
     def run(self):
         print(
+            "-------\n"
             "Press F8 to start/stop the timer\n"
             "Press shift+F7 to enter a new total time\n"
             "Press shift+F8 to undo the last addition to total time\n"
             "Press shift+F9 to start a new timer session in this window\n"
-            "-----"
+            "-------"
         )
 
         # Edit hotkey strings to suit your needs, be mindful of OS and application hotkeys
@@ -148,6 +150,6 @@ if __name__ == "__main__":
     current_date = datetime.now().strftime("%Y-%m-%d")
     filename = f"{current_date}.txt"
     get_dir = os.path.dirname(os.path.realpath(__file__))
-    file_path = os.path.join(get_dir, "logs", filename)
+    file_path = os.path.join(get_dir, "../logs", filename)
     app = TimerApp()
     app.run()
