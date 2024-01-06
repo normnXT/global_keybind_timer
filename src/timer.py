@@ -37,16 +37,15 @@ class TimerApp:
     def inactivity_ping(self):
         # Plays an inactivity ping sound every 300 seconds while the timer is not running.
         # Edit reminder interval or turn on/off in settings.json.
-        reminder_interval = settings['sound']['reminder_interval']
-        if settings['sound']['play_sound']:
-            try:
-                while not self.running:
-                    if time.time() - self.time_at_stop > reminder_interval:
-                        sound_thread = threading.Thread(target=play_sound, args=("../sound/ekg-variant.wav",))
-                        sound_thread.start()
-                        reminder_interval += settings['sound']['reminder_interval']
-            except self.running:
-                pass
+        reminder_interval = settings["sound"]["reminder_interval"]
+        if settings["sound"]["play_sound"]:
+            while not self.running:
+                if time.time() - self.time_at_stop > reminder_interval:
+                    sound_thread = threading.Thread(
+                        target=play_sound, args=("../sound/ekg-variant.wav",)
+                    )
+                    sound_thread.start()
+                    reminder_interval += settings["sound"]["reminder_interval"]
         else:
             pass
 
@@ -92,10 +91,12 @@ class TimerApp:
 
         # Edit hotkey strings in settings.json to suit your needs, be mindful of OS and application hotkeys
         # https://github.com/boppreh/keyboard#api
-        keyboard.add_hotkey(settings['keybindings']['toggle_timer'], self.toggle_timer)
-        keyboard.add_hotkey(settings['keybindings']['edit_time'], self.edit_time)
-        keyboard.add_hotkey(settings['keybindings']['rollback_time'], self.rollback_time)
-        keyboard.add_hotkey(settings['keybindings']['new_session'], self.new_session)
+        keyboard.add_hotkey(settings["keybindings"]["toggle_timer"], self.toggle_timer)
+        keyboard.add_hotkey(settings["keybindings"]["edit_time"], self.edit_time)
+        keyboard.add_hotkey(
+            settings["keybindings"]["rollback_time"], self.rollback_time
+        )
+        keyboard.add_hotkey(settings["keybindings"]["new_session"], self.new_session)
 
         # Keeps the program running and adds redundancy by updating the time when application is closed.
         try:
@@ -109,32 +110,36 @@ class TimerApp:
 
 
 def log_time_start():
-    with open(file_path, "a") as file:
+    with open(file_path, "a", encoding="UTF-8") as file:
         file.write(f"Timer started at {get_date_and_time()}\n")
     print(f"Timer started at {get_date_and_time()}")
 
 
 def log_time_stop(formatted_time):
-    with open(file_path, "a") as file:
-        file.write(f"Timer stopped at {get_date_and_time()} | Total time: {formatted_time}\n")
+    with open(file_path, "a", encoding="UTF-8") as file:
+        file.write(
+            f"Timer stopped at {get_date_and_time()} | Total time: {formatted_time}\n"
+        )
     print(f"Timer stopped at {get_date_and_time()} | Total time: {formatted_time}")
 
 
 def log_rollback(formatted_time):
-    with open(file_path, "a") as file:
+    with open(file_path, "a", encoding="UTF-8") as file:
         file.write(f"Time removed | Total time: {formatted_time}\n")
     print(f"Time removed | Total time: {formatted_time}")
 
 
 def log_session():
-    with open(file_path, "a") as file:
+    with open(file_path, "a", encoding="UTF-8") as file:
         file.write("\n--- Started a new timer session ---\n")
     print("\n--- Started a new timer session ---\n")
 
 
 def log_edit(formatted_time):
-    with open(file_path, "a") as file:
-        file.write(f"Timer edited at {get_date_and_time()} | Total time: {formatted_time}")
+    with open(file_path, "a", encoding="UTF-8") as file:
+        file.write(
+            f"Timer edited at {get_date_and_time()} | Total time: {formatted_time}"
+        )
     print(f"Timer edited at {get_date_and_time()} | Total time: {formatted_time}")
 
 
@@ -154,7 +159,7 @@ def play_sound(sound_path):
 
 
 def load_settings():
-    with open('../settings.json', 'r') as file:
+    with open("../settings.json", "r") as file:
         return json.load(file)
 
 
